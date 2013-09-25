@@ -28,6 +28,3 @@ var makeStack = function(){
 
   return instance;
 };
-
-
-new 
