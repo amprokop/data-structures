@@ -15,7 +15,9 @@ var makeQueue = function(){
   };
 
   instance.dequeue = function(){
-    var value = storage[indexFirst]; 
+    if (indexLast - indexFirst === 0) {return undefined; }
+
+    var value = storage[indexFirst];
     //save the value for output
     storage[indexFirst] = undefined;
     //get rid of the value of the first value
@@ -23,16 +25,10 @@ var makeQueue = function(){
     //shift the index forward one
     return value;
     //give us the value
-    
   };
 
   instance.size = function(){
-    if ((indexLast - indexFirst) > 0) {
     return indexLast - indexFirst;
-  } else {
-    return 0;
-  }
-  
   };
 
   return instance;
