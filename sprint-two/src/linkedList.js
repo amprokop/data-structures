@@ -3,26 +3,25 @@ var makeLinkedList = function(){
   var list = {};
   list.head = null;
   list.tail = null;
+  list.prev = null;
 
   list.addToTail = function(value){
-    var newTail = makeNode(value);
-    newTail.prev = list.tail;
     if(list.head === null) {
       list.head = newTail;
-    } else {
-      list.tail.next = newTail;
     }
+    var newTail = makeNode(value);
+    newTail.prev = list.tail;    
+    list.tail.next = newTail;
     list.tail = newTail;
-
   };
 
   list.removeHead = function(){
-    var headVal = list.head.value;
-    var next = list.head.next;
-    list.head.next.prev = null;
+    var currentHeadVal = list.head.value;
+    var headInWaiting = list.head.next;
+    headInWaiting.prev = null;
     delete list.head;
-    list.head = next;
-    return headVal;
+    list.head = headInWaiting;
+    return currentHeadVal;
   };
 
   list.addToHead = function(value){
