@@ -20,7 +20,12 @@ describe("hashTable", function() {
     expect(hashTable.retrieve(v2)).toEqual(v2);
   });
 
-  it("should be able to insert", function(){
+  it("should be able to insert and remove correctly", function(){
+    var bob = "marley";
+    var joe = "namath";
+    hashTable.insert(bob,joe);
+    hashTable.remove(joe);
+    expect(hashTable.retrieve(joe)).toEqual("Nothing here!");
 
   });
 

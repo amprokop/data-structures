@@ -21,7 +21,7 @@ HashTable.prototype.insert = function(k, v){
 HashTable.prototype.retrieve = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
   if (this._storage.get(i) === undefined){
-    return "Ain't nothing here!";
+    return "Nothing here!";
   }
 
   var bucket = this._storage.get(i);
