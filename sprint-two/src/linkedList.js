@@ -6,6 +6,7 @@ var makeLinkedList = function(){
 
   list.addToTail = function(value){
     var newTail = makeNode(value);
+    newTail.prev = list.tail;
     if(list.head === null) {
       list.head = newTail;
     } else {
@@ -18,6 +19,7 @@ var makeLinkedList = function(){
   list.removeHead = function(){
     var headVal = list.head.value;
     var next = list.head.next;
+    list.head.next.prev = null;
     delete list.head;
     list.head = next;
     return headVal;
@@ -27,7 +29,6 @@ var makeLinkedList = function(){
     var temp = list;
     var newList = makeLinkedList();
     newList = newList.addToTail(value);
-
   }; 
 
   list.contains = function(target, node){
@@ -49,6 +50,7 @@ var makeNode = function(value){
   var node = {};
   node.value = value;
   node.next = null;
+  node.prev = null;
 
   return node;
 };

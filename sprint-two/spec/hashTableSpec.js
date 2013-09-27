@@ -21,15 +21,19 @@ describe("hashTable", function() {
   });
 
   it("should be able to insert and remove correctly", function(){
-    var bob = "marley";
-    var joe = "namath";
-    hashTable.insert(bob,joe);
-    hashTable.remove(joe);
-    expect(hashTable.retrieve(joe)).toEqual("Nothing here!");
+    var bob = "bob";
+    var marley = "marley";
+    hashTable.insert(bob,marley);
+    hashTable.remove(bob);
+    expect(hashTable.retrieve(bob)).toBeUndefined();
 
   });
 
-  it("should be able to retrieve", function(){
+  it("should be able to retrieve lotsa cool things", function(){
 
+    hashTable.insert(PenelopeCruzPhoneNumber, '9733014567');
+    hashTable.insert(JohnnyDeppPINnumber, '8643');
+    expect(hashTable.retrieve(PenelopeCruzPhoneNumber)).toEqual('9733014567');
+    expect(hashTable.retrieve(PenelopeCruzPhoneNumber)).toEqual('8643');
   });
 });

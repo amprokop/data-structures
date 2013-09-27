@@ -20,10 +20,6 @@ HashTable.prototype.insert = function(k, v){
 
 HashTable.prototype.retrieve = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
-  if (this._storage.get(i) === undefined){
-    return "Nothing here!";
-  }
-
   var bucket = this._storage.get(i);
   var output;
   for (var j = 0; j < this._storage.get(i).length; j++){
@@ -46,8 +42,8 @@ HashTable.prototype.remove = function(k){
       indexOfPairToRemove = j;
     }
   }
-  newBucket = bucket.splice(j,1);
-this._storage.set(i, newBucket); 
+  bucket.splice(indexOfPairToRemove, 1);
+  this._storage.set(i, bucket);
 };
 
 // NOTE: For this code to work, you will NEED the code from hashTableHelpers.js
