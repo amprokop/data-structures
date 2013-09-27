@@ -23,6 +23,13 @@ var makeLinkedList = function(){
     return headVal;
   };
 
+  list.addToHead = function(value){
+    var temp = list;
+    var newList = makeLinkedList();
+    newList = newList.addToTail(value);
+
+  }; 
+
   list.contains = function(target, node){
     node = node || list.head;
     if(node.value === target) {

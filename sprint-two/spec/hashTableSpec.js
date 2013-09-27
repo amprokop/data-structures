@@ -20,5 +20,11 @@ describe("hashTable", function() {
     expect(hashTable.retrieve(v2)).toEqual(v2);
   });
 
-  // add more tests!
+  it("should be able to insert", function(){
+
+  });
+
+  it("should be able to retrieve", function(){
+
+  });
 });

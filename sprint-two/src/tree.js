@@ -1,11 +1,10 @@
 
-console.log(treeMethods);
-
 var makeTree = function(value){
   var newTree = {};
-  newTree.extend(newTree, treeMethods);
+  extend(newTree, treeMethods);
   newTree.value = value;
-  newTree.children = [];
+  newTree.children = undefined;
+
   return newTree;
 };
 
@@ -19,16 +18,25 @@ var extend = function(to, from){
 
 var treeMethods = {};
 
-treeMethods.addChild = function(value){
-  this.children.push(makeTree(value));
+treeMethods.addChild = function(child){
+  if(this.children === undefined){
+    this.children = [child];
+  } else {
+    this.children.push(child);
+  }
 };
 
 treeMethods.contains = function(target){
   if (target === this.value){
     return true;
+  } else if (this.children !== undefined){
+    for (var i = 0; i < this.children.length; i++){
+      if ((this.children[i]).contains(target)) {
+        return true;
+      }
     }
-
-  for (var i = 0; i < this.children.length; i++){
-    return this.children[i].contains(target);
   }
+
+return false;
 };
+
