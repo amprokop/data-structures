@@ -12,9 +12,11 @@ describe("tree", function() {
   });
 
   it("should have a working 'contains' method that can operate over several levels of nesting", function(){
-    tree.addChild({value: 3});
-    tree.addChild({value: 2});
+    tree.addChild(3);
+    tree.addChild(2);
+    console.log(tree);
     expect(tree.contains(3)).toBe(true);
+    console.log(4);
     expect(tree.contains(4)).toBe(false);
     expect(tree.contains(2)).toBe(true);
   });

@@ -25,7 +25,7 @@ HashTable.prototype.retrieve = function(k){
   for (var j = 0; j < this._storage.get(i).length; j++){
     var pair = this._storage.get(i)[j];
     if(pair[0] === k){
-      output = pair[i];
+      output = pair[1];
     }
   }
   return output;

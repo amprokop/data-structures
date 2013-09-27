@@ -18,7 +18,8 @@ var extend = function(to, from){
 
 var treeMethods = {};
 
-treeMethods.addChild = function(child){
+treeMethods.addChild = function(value){
+  var child = makeTree(value);
   if(this.children === undefined){
     this.children = [child];
   } else {
