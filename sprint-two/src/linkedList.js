@@ -5,14 +5,31 @@ var makeLinkedList = function(){
   list.tail = null;
   list.prev = null;
 
+
+  list.removeTail = function(){
+    var tailInWaiting = list.tail.prev;
+    var oldTailValue = list.tail.value;
+    tailInWaiting.next = null;
+    delete list.tail;
+    list.tail = tailInWaiting;
+    return oldTailValue;
+  };
+
+
   list.addToTail = function(value){
+    var tailInWaiting = makeNode(value);
+
     if(list.head === null) {
-      list.head = newTail;
+      list.head = tailInWaiting;
     }
-    var newTail = makeNode(value);
-    newTail.prev = list.tail;    
-    list.tail.next = newTail;
-    list.tail = newTail;
+
+    tailInWaiting.prev = list.tail;
+
+    if (list.tail){
+      list.tail.next = tailInWaiting;
+    }
+
+    list.tail = tailInWaiting;
   };
 
   list.removeHead = function(){
@@ -25,10 +42,11 @@ var makeLinkedList = function(){
   };
 
   list.addToHead = function(value){
-    var temp = list;
-    var newList = makeLinkedList();
-    newList = newList.addToTail(value);
-  }; 
+    var headInWaiting = makeNode(value);
+    list.head.prev = headInWaiting;
+    headInWaiting.next = list.head;
+    list.head = headInWaiting;
+  };
 
   list.contains = function(target, node){
     node = node || list.head;
