@@ -39,7 +39,18 @@ treeMethods.contains = function(target){
       }
     }
   }
-
 return false;
+};
+
+treeMethods.removeFromParent = function(){
+  var indexToRemove;
+  for (var i = 0; i < this.parent.children.length; i++){
+    if (this.parent.children[i] === this){
+      indexToRemove = i;
+      break;
+    }
+  }
+  this.parent.children.splice(indexToRemove,1);
+  this.parent = undefined;
 };
 

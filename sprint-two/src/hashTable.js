@@ -1,12 +1,15 @@
 var HashTable = function(){
   this._limit = 8;
   this._storage = makeLimitedArray(this._limit);
+  this._occupiedBuckets = 0;
 };
 
 HashTable.prototype.insert = function(k, v){
   var i = getIndexBelowMaxForKey(k, this._limit);
   if (this._storage.get(i) === undefined){
     this._storage.set(i, [[k, v]]);
+    this._occupiedBuckets++;
+    console.log(this._occupiedBuckets);
   } else {
     var bucket = [];
     for (var j = 0;j < this._storage.get(i).length; j++){
@@ -16,7 +19,51 @@ HashTable.prototype.insert = function(k, v){
     bucket.push([k,v]);
     this._storage.set(i, bucket);
   }
+
+  if ( ( this._occupiedBuckets ) >= (this._limit * .75)  ) {
+    this.rehash();
+  }
 };
+
+HashTable.prototype.rehash = function(){
+//reusable across doubling and halving
+debugger;
+var thingsToRehash = [];
+
+  this._storage.each(function(bucket){
+    for (var i = 0; i < bucket.length; i++){
+      thingsToRehash.push(bucket[i]);
+    }
+
+  if ( (this._occupiedBuckets) >= (this._limit * .75) ){
+    this._limit = this._limit * 2;
+  } else {
+    this._limit = (this._limit / 2);
+  }
+
+  this._storage = makeLimitedArray(this._limit);
+
+  for (var j = 0; j < thingsToRehash.length; j++){
+    var pair = thingsToRehash[j];
+    this.insert(pair[0],pair[1]);
+  }
+
+});
+
+//iterate through all buckets in the limited array
+//iterate through all items in each bucket
+//push each pair to a temporary storage unit
+//remove each pair
+//if doubling, double the limit
+//if halving, halve the limit
+//call insert on each pair in the temporary storage unit
+
+};
+
+HashTable.prototype.contains = function(list, item){
+
+};
+
 
 HashTable.prototype.retrieve = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
