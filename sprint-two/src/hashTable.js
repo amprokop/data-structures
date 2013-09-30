@@ -1,98 +1,74 @@
 var HashTable = function(){
   this._limit = 8;
+  this._size = 0;
+
+  // Use a limited array to store inserted elements.
+  // It'll keep you from using too much space. Usage:
+  //
+  //   limitedArray.set(3, 'hi');
+  //   limitedArray.get(3); // alerts 'hi'
+  //
+  // There's also a '.each' method that you might find
+  // handy once you're working on resizing
   this._storage = makeLimitedArray(this._limit);
-  this._occupiedBuckets = 0;
 };
 
 HashTable.prototype.insert = function(k, v){
   var i = getIndexBelowMaxForKey(k, this._limit);
-  if (this._storage.get(i) === undefined){
-    this._storage.set(i, [[k, v]]);
-    this._occupiedBuckets++;
-    console.log(this._occupiedBuckets);
-  } else {
-    var bucket = [];
-    for (var j = 0;j < this._storage.get(i).length; j++){
-      var pair = this._storage.get(i)[j];
-      bucket.push(pair);
+
+  var pairs = this._storage.get(i) || [];
+  for( var j = 0; j < pairs.length; j++ ){
+    var pair = pairs[j];
+    if( pair[0] === k ){
+      pair[1] = v;
+      return;
     }
-    bucket.push([k,v]);
-    this._storage.set(i, bucket);
   }
 
-  if ( ( this._occupiedBuckets ) >= (this._limit * .75)  ) {
-    this.rehash();
+  pairs.push([k,v]);
+  this._size++;
+  if( this._size > this._limit * 0.75 ){
+    this.resize(this._limit*2);
   }
+  this._storage.set(i, pairs);
 };
-
-HashTable.prototype.rehash = function(){
-//reusable across doubling and halving
-debugger;
-var thingsToRehash = [];
-
-  this._storage.each(function(bucket){
-    for (var i = 0; i < bucket.length; i++){
-      thingsToRehash.push(bucket[i]);
-    }
-
-  if ( (this._occupiedBuckets) >= (this._limit * .75) ){
-    this._limit = this._limit * 2;
-  } else {
-    this._limit = (this._limit / 2);
-  }
-
-  this._storage = makeLimitedArray(this._limit);
-
-  for (var j = 0; j < thingsToRehash.length; j++){
-    var pair = thingsToRehash[j];
-    this.insert(pair[0],pair[1]);
-  }
-
-});
-
-//iterate through all buckets in the limited array
-//iterate through all items in each bucket
-//push each pair to a temporary storage unit
-//remove each pair
-//if doubling, double the limit
-//if halving, halve the limit
-//call insert on each pair in the temporary storage unit
-
-};
-
-HashTable.prototype.contains = function(list, item){
-
-};
-
 
 HashTable.prototype.retrieve = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
-  var bucket = this._storage.get(i);
-  var output;
-  for (var j = 0; j < this._storage.get(i).length; j++){
-    var pair = this._storage.get(i)[j];
-    if(pair[0] === k){
-      output = pair[1];
+  var pairs = this._storage.get(i) || [];
+  for( var j = 0; j < pairs.length; j++ ){
+    var pair = pairs[j];
+    if( pair[0] === k ){
+      return pair[1];
     }
   }
-  return output;
 };
 
 HashTable.prototype.remove = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
-  var bucket = this._storage.get(i);
-  var indexOfPairToRemove;
-
-  for (j = 0; j < bucket.length; j++){
-    pair = bucket[j];
-    if (pair[0] === k){
-      indexOfPairToRemove = j;
+  var pairs = this._storage.get(i) || [];
+  for( var j = 0; j < pairs.length; j++ ){
+    var pair = pairs[j];
+    if( pair[0] === k ){
+      var savedPair = pairs.splice(j,1);
+      this._size--;
+      if( this._size < this._limit * 0.25 ){
+        this.resize(this._limit*0.5);
+      }
+      return savedPair[1];
     }
   }
-  bucket.splice(indexOfPairToRemove, 1);
-  this._storage.set(i, bucket);
 };
 
-// NOTE: For this code to work, you will NEED the code from hashTableHelpers.js
-// Start by loading those files up and playing with the functions it provides.
-// You don't need to understand how they work, only their interface is important to you
+HashTable.prototype.resize = function(newLimit){
+  this._limit = newLimit;
+  var oldStorage = this._storage;
+  this._storage = makeLimitedArray(this._limit);
+
+  oldStorage.each(function(pairs){
+    for( var i = 0; i < pairs.length; i++ ){
+      var pair = pairs[i];
+      this.insert(pair[0], pair[1]);
+    }
+  });
+};
